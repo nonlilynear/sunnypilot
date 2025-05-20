@@ -8,6 +8,10 @@ from typing import Any
 
 from opendbc.car import structs
 from opendbc.car.interfaces import CarInterfaceBase
+from opendbc.car.hyundai.radar_interface import RADAR_START_ADDR
+from opendbc.car.hyundai.values import HyundaiFlags, DBC as HYUNDAI_DBC
+from opendbc.sunnypilot.car.hyundai.longitudinal.helpers import LongitudinalTuningType, RadarType
+from opendbc.sunnypilot.car.hyundai.values import HyundaiFlagsSP
 from openpilot.common.params import Params
 from openpilot.common.swaglog import cloudlog
 from openpilot.sunnypilot.selfdrive.controls.lib.nnlc.helpers import get_nn_model_path
@@ -92,6 +96,19 @@ def _cleanup_unsupported_params(CP: structs.CarParams, CP_SP: structs.CarParamsS
   set_speed_limit_assist_availability(CP, CP_SP, params)
 
 
+def _initialize_radar(CI: CarInterfaceBase, CP: structs.CarParams, CP_SP: structs.CarParamsSP, params: Params = None) -> None:
+  if params is None:
+    params = Params()
+
+  # Hyundai Radar
+  if CP.brand == 'hyundai':
+    hyundai_radar = int(params.get("HyundaiRadar", encoding="utf8") or 0)
+    if hyundai_radar == RadarType.LEAD_ONLY:
+      CP_SP.flags |= HyundaiFlagsSP.RADAR_LEAD_ONLY.value
+    if hyundai_radar == RadarType.FULL_RADAR:
+      CP_SP.flags |= HyundaiFlagsSP.RADAR_FULL_RADAR.value
+
+
 def setup_interfaces(CI: CarInterfaceBase, params: Params = None) -> None:
   CP = CI.CP
   CP_SP = CI.CP_SP
@@ -100,13 +117,14 @@ def setup_interfaces(CI: CarInterfaceBase, params: Params = None) -> None:
   nnlc_enabled = _initialize_neural_network_lateral_control(CP, CP_SP, params)
   _initialize_intelligent_cruise_button_management(CP, CP_SP, params)
   _initialize_torque_lateral_control(CI, CP, enforce_torque, nnlc_enabled)
+  _initialize_radar_tracks(CP, CP_SP, params)
+  _initialize_radar(CI, CP, CP_SP, params)
   _cleanup_unsupported_params(CP, CP_SP)
 
   try:
     STATSLOGSP.raw('sunnypilot.car_params', CP.to_dict())
   except RuntimeError:
     pass  # to_dict fails on macOS due to library issues.
-  # STATSLOGSP.raw('sunnypilot_params.car_params_sp', CP_SP.to_dict()) # https://github.com/sunnypilot/opendbc/pull/361
 
 
 def initialize_params(params) -> list[dict[str, Any]]:

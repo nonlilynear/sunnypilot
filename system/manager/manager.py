@@ -48,6 +48,23 @@ def manager_init() -> None:
     if not os.path.exists(prebuilt_path):
       open(prebuilt_path, 'x').close()
 
+  sunnypilot_default_params: list[tuple[str, str | bytes]] = [
+    ("AutoLaneChangeTimer", "0"),
+    ("AutoLaneChangeBsmDelay", "0"),
+    ("DynamicExperimentalControl", "0"),
+    ("HyundaiLongitudinalTuning", "0"),
+    ("HyundaiRadar", "0"),
+    ("Mads", "1"),
+    ("MadsMainCruiseAllowed", "1"),
+    ("MadsSteeringMode", "0"),
+    ("MadsUnifiedEngagementMode", "1"),
+    ("MaxTimeOffroad", "1800"),
+    ("ModelManager_LastSyncTime", "0"),
+    ("ModelManager_ModelsCache", ""),
+    ("NeuralNetworkLateralControl", "0"),
+    ("QuietMode", "0"),
+  ]
+
   if params.get_bool("RecordFrontLock"):
     params.put_bool("RecordFront", True)
 
