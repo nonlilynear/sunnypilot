@@ -8,7 +8,6 @@ from typing import Any
 
 from opendbc.car import structs
 from opendbc.car.interfaces import CarInterfaceBase
-from opendbc.car.hyundai.radar_interface import RADAR_START_ADDR
 from opendbc.car.hyundai.values import HyundaiFlags, DBC as HYUNDAI_DBC
 from opendbc.sunnypilot.car.hyundai.longitudinal.helpers import LongitudinalTuningType, RadarType
 from opendbc.sunnypilot.car.hyundai.values import HyundaiFlagsSP

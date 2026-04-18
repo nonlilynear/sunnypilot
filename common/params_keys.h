@@ -221,7 +221,7 @@ inline static std::unordered_map<std::string, ParamKeyAttributes> keys = {
     {"HyundaiRadarTracksConfirmed", {PERSISTENT}},
     {"HyundaiRadarTracksPersistent", {PERSISTENT}},
     {"HyundaiRadarTracksToggle", {PERSISTENT}},
-    {"HyundaiRadar", {PERSISTENT}},
+    {"HyundaiRadar", {PERSISTENT, INT, "0"}},
     {"SubaruStopAndGo", {PERSISTENT | BACKUP, BOOL, "0"}},
     {"SubaruStopAndGoManualParkingBrake", {PERSISTENT | BACKUP, BOOL, "0"}},
     {"TeslaCoopSteering", {PERSISTENT | BACKUP, BOOL, "0"}},
