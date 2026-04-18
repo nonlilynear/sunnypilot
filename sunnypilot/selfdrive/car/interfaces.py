@@ -118,8 +118,6 @@ def setup_interfaces(CI: CarInterfaceBase, params: Params = None) -> None:
   nnlc_enabled = _initialize_neural_network_lateral_control(CP, CP_SP, params)
   _initialize_intelligent_cruise_button_management(CP, CP_SP, params)
   _initialize_torque_lateral_control(CI, CP, enforce_torque, nnlc_enabled)
-  _initialize_radar_tracks(CP, CP_SP, params)
-  _initialize_radar(CI, CP, CP_SP, params)
   _cleanup_unsupported_params(CP, CP_SP)
 
   try:
